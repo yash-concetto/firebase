@@ -45,50 +45,55 @@ class ChatScreen extends StatelessWidget {
                       controller
                           .messageList[index].time!.millisecondsSinceEpoch);
                   final time = DateFormat('hh:mm').format(dateTime);
-                  return Container(
-                    padding: const EdgeInsets.only(
-                        left: 14, right: 14, top: 10, bottom: 10),
+                  return
+                  Padding(
+                    padding: const EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
                     child: Align(
-                      alignment: (controller
-                              .messageList[index].isReceiver! /*== "receiver"*/
-                          ? Alignment.topLeft
-                          : Alignment.topRight),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: (controller.messageList[index]
-                                  .isReceiver! /*== "receiver"*/
-                              ? Colors.grey.shade200
-                              : Colors.blue[200]),
-                        ),
-                        padding: const EdgeInsets.all(5),
-                        child: Column(
-                          children: [
-                            controller.messageList[index].isReceiver!
-                                ? Column(
-                                    children: [
-                                      Text(controller.messageList[index].Id_userUid!, style: const TextStyle(fontSize: 5),),
-                                      Text(controller.messageList[index].message, style: const TextStyle(fontSize: 15),),
-                                    ],
-                                  )
-                                : Text(controller.messageList[index].message, style: const TextStyle(fontSize: 15),),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 30),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
+                        alignment: (controller.messageList[index].isReceiver!
+                            ? Alignment.topLeft
+                            : Alignment.topRight),
+                        child: Container(
+                          // width: ,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            color: (controller.messageList[index]
+                                    .isReceiver!
+                                ? Colors.grey.shade200
+                                : Colors.blue[200]),
+                          ),
+                          padding: const EdgeInsets.all(5),
+                          child: controller.messageList[index].isReceiver!
+                              ? Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(controller.messageList[index].Id_userUid!, style: const TextStyle(fontSize: 5),),
+                                    Text(controller.messageList[index].message, style: const TextStyle(fontSize: 15),),
+                                    Text(time, style: const TextStyle(fontSize: 10),),
+                                  ],
+                                )
+                              : Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  Text(
-                                    time,
-                                    style: const TextStyle(fontSize: 12),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  const Icon(Icons.done_all),
-                                ],
+                                  Text(controller.messageList[index].message, style: const TextStyle(fontSize: 15),),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(time, style: const TextStyle(fontSize: 10),
                               ),
-                            ),
-                          ],
+                              const SizedBox(width: 5),
+                              // controller.messageList[index].isReceiver! ||
+                              //     controller.messageList[index].checkConnection?.value ?? false ?
+                                  // == null ?
+                              // const Icon(Icons.timer_outlined,size: 18,):
+                              const Icon(Icons.done_all,size: 18,)
+                            ],
+                          ),
+                                ],
+                          ),
                         ),
-                      ),
+                      // ),
                     ),
                   );
                 },
