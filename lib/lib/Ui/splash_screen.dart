@@ -4,11 +4,12 @@ import 'package:get/get.dart';
 import '../controller/spalsh_controller.dart';
 
 class SplashScreen extends GetView<SplashController> {
-  final SplashController controller = Get.put(SplashController());
+  const SplashScreen({super.key});
 
 
   @override
   Widget build(BuildContext context) {
+    final SplashController controller = Get.put(SplashController());
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

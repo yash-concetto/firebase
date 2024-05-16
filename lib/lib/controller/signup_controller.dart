@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase/lib/controller/phone_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:get/get.dart';
 class SignUpController extends GetxController {
   String registerNumber = '';
 
+  RxBool isActive = false.obs;
   FirebaseAuth auth = FirebaseAuth.instance;
   RxBool passwordVisible = false.obs;
   final name = TextEditingController();
@@ -18,10 +18,10 @@ class SignUpController extends GetxController {
 
   @override
   void onInit() {
-    super.onInit();
     registerNumber = Get.arguments;
     print(registerNumber);
     passwordVisible = true.obs;
+    super.onInit();
   }
 
   Future<void> fireStore() async {
@@ -32,19 +32,18 @@ class SignUpController extends GetxController {
         await FirebaseFirestore.instance.collection('user').add({
           'name': name.text,
           'email': email.text,
-          'number': number.text,
+          'number': registerNumber,
           'password': password.text,
-          'Id_usuario': uid
+          'Id_usuario': uid,
+          'isActive': isActive.value,
         });
-      } else {
-        Get.snackbar('please check', 'your number is wrong or added',snackPosition: SnackPosition.BOTTOM);
+      // } else {
+      //   Get.snackbar('please check', 'your number is wrong or added',snackPosition: SnackPosition.BOTTOM);
       }
     });
   }
 
-
-
   void navigateToLogin(String number) {
-    Get.toNamed("/login",arguments: number);
+    Get.toNamed("/login",arguments: {'number':number});
   }
 }

@@ -1,10 +1,12 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../controller/chat_controller.dart';
 
-class ChatScreen extends StatelessWidget {
+class ChatScreen extends GetView<ChatScreen> {
   const ChatScreen({super.key});
 
   @override
@@ -16,7 +18,7 @@ class ChatScreen extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () {
-                  Get.toNamed("/login", arguments: controller.number);
+                  Get.toNamed("/login");
                 },
                 icon: const Icon(
                   Icons.login_outlined,
@@ -45,54 +47,95 @@ class ChatScreen extends StatelessWidget {
                       controller
                           .messageList[index].time!.millisecondsSinceEpoch);
                   final time = DateFormat('hh:mm').format(dateTime);
-                  return
-                  Padding(
-                    padding: const EdgeInsets.only(left: 14, right: 14, top: 10, bottom: 10),
+                  return Padding(
+                    padding: const EdgeInsets.only(
+                        left: 14, right: 14, top: 10, bottom: 10),
                     child: Align(
-                        alignment: (controller.messageList[index].isReceiver!
-                            ? Alignment.topLeft
-                            : Alignment.topRight),
-                        child: Container(
-                          // width: ,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            color: (controller.messageList[index]
-                                    .isReceiver!
-                                ? Colors.grey.shade200
-                                : Colors.blue[200]),
-                          ),
-                          padding: const EdgeInsets.all(5),
-                          child: controller.messageList[index].isReceiver!
-                              ? Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(controller.messageList[index].Id_userUid!, style: const TextStyle(fontSize: 5),),
-                                    Text(controller.messageList[index].message, style: const TextStyle(fontSize: 15),),
-                                    Text(time, style: const TextStyle(fontSize: 10),),
-                                  ],
-                                )
-                              : Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Text(controller.messageList[index].message, style: const TextStyle(fontSize: 15),),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(time, style: const TextStyle(fontSize: 10),
-                              ),
-                              const SizedBox(width: 5),
-                              // controller.messageList[index].isReceiver! ||
-                              //     controller.messageList[index].checkConnection?.value ?? false ?
-                                  // == null ?
-                              // const Icon(Icons.timer_outlined,size: 18,):
-                              const Icon(Icons.done_all,size: 18,)
-                            ],
-                          ),
-                                ],
-                          ),
+                      alignment: (controller.messageList[index].isReceiver!
+                          ? Alignment.topLeft
+                          : Alignment.topRight),
+                      child: Container(
+                        // width: ,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          color: (controller.messageList[index].isReceiver!
+                              ? Colors.grey.shade200
+                              : Colors.blue[200]),
                         ),
+                        padding: const EdgeInsets.all(5),
+                        child: controller.messageList[index].isReceiver!
+                            ? Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    controller.messageList[index]
+                                            .receiverNumber ??
+                                        '',
+                                    style: const TextStyle(fontSize: 5),
+                                  ),
+                                  Text(
+                                    controller.messageList[index].message,
+                                    style: const TextStyle(fontSize: 15),
+                                  ),
+                                  Text(
+                                    time,
+                                    style: const TextStyle(fontSize: 10),
+                                  ),
+                                ],
+                              )
+                            : InkWell(
+                                onLongPress: () {
+                                  if(controller.messageList[index].isDelete?.value == false){
+                                    controller.openDialog(controller.messageList[index].uniqueId!);
+                                  }
+                                  const Duration(seconds: 1);
+                                },
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    controller.messageList[index].isDelete?.value == true ?
+                                    const Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.block,color: Colors.black45,size: 15),
+                                        Text(
+                                          'You Deleted this Message',
+                                          style: TextStyle(fontSize: 10,color: Colors.black45),
+                                        ),
+                                      ],
+                                    ): Text(
+                                        controller.messageList[index].message,
+                                        style: const TextStyle(fontSize: 15,color: Colors.black),
+                                      ),
+
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          time,
+                                          style: const TextStyle(fontSize: 10),
+                                        ),
+                                        const SizedBox(width: 5),
+                                        controller.messageList[index]
+                                                    .seenMessage?.value ??
+                                                false
+                                            ? const Icon(
+                                                Icons.done_all,
+                                                size: 18,
+                                                color: Colors.lightBlue,
+                                              )
+                                            : const Icon(
+                                                Icons.done_all,
+                                                size: 18,
+                                              )
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                      ),
                       // ),
                     ),
                   );
@@ -155,4 +198,3 @@ class ChatScreen extends StatelessWidget {
     );
   }
 }
-

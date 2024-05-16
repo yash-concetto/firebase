@@ -5,10 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class   LoginController extends GetxController {
-
+class LoginController extends GetxController {
+  String registerNumber = '';
   FirebaseAuth auth = FirebaseAuth.instance;
-  String getRegisterNumber = '';
 
   RxBool passwordVisible = false.obs;
   final number = TextEditingController();
@@ -17,30 +16,36 @@ class   LoginController extends GetxController {
 
 
   @override
+  void onReady() {
+    if(Get.arguments != null) {
+      registerNumber = Get.arguments;
+      print('22${registerNumber}');
+    }
+    passwordVisible = true.obs;
+    super.onReady();
+  }
+  @override
   void onInit() {
     super.onInit();
-    getRegisterNumber = Get.arguments;
-    print(getRegisterNumber);
-    passwordVisible = true.obs;
   }
 
   Future<void> check() async {
-    final User? user = auth.currentUser;
-    final uid = user!.uid;
-    // var query = FirebaseFirestore.instance.collection('user');
     Query<Map<String, dynamic>> query = FirebaseFirestore.instance.collection('user');
         query = query.where('number', isEqualTo: number.text);
         query = query.where('password', isEqualTo: password.text);
             query.get().then((value) async {
       if (value.docs.isNotEmpty) {
-        Get.toNamed('/chat',arguments: getRegisterNumber);
+        navigateToChat(registerNumber);
+        // Get.toNamed('/chat',arguments: getRegisterNumber);
       } else {
         Get.snackbar('please check', 'Invalid number or password',snackPosition: SnackPosition.BOTTOM);
       }
     });
   }
 
-
+  void navigateToChat(String number) {
+    Get.toNamed("/chat",arguments: number);
+  }
 
   void navigateToSign() {
     Get.toNamed("/phone");

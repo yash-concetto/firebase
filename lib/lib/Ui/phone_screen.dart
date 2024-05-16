@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class PhoneScreen extends StatelessWidget {
+class PhoneScreen extends GetView<PhoneController> {
   const PhoneScreen({super.key});
 
   @override

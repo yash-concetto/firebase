@@ -2,11 +2,14 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase/lib/controller/login_controller.dart';
+import 'package:firebase/lib/controller/signup_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 class SplashController extends GetxController{
+  // final controller = Get.put(LoginController());
 RxBool iaActive = true.obs;
 
   @override
@@ -16,16 +19,9 @@ RxBool iaActive = true.obs;
   }
 
   Future<void> navigateToNext() async {
-    // Get.toNamed('/phone');
     if(FirebaseAuth.instance.currentUser != null){
-      await Get.toNamed("/chat");
-      if(await checkConnection()){
-        iaActive.value == true;
-        // debounce(listener, (callback) => null);
-        debugPrint("we arr back from chat");
-      }
+      Get.toNamed("/chat");
     }else{
-        // iaActive.value == true;
         Get.toNamed("/login");
     }
   }

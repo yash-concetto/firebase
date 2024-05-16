@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SignUpScreen extends StatelessWidget {
+class SignUpScreen extends GetView<SignUpController> {
   const SignUpScreen({super.key});
 
   @override
@@ -24,11 +24,11 @@ class SignUpScreen extends StatelessWidget {
                     decoration: const InputDecoration(labelText: 'Name',prefixIcon: Icon(Icons.perm_identity)),
                   ),
               const SizedBox(height: 30),
-              TextFormField(
-                controller: controller.number,
-                decoration: const InputDecoration(labelText: 'Number',prefixIcon: Icon(Icons.phone)),
-              ),
-              const SizedBox(height: 30),
+              // TextFormField(
+              //   controller: controller.number,
+              //   decoration: const InputDecoration(labelText: 'Number',prefixIcon: Icon(Icons.phone)),
+              // ),
+              // const SizedBox(height: 30),
               TextFormField(
                 controller: controller.email,
                 decoration: const InputDecoration(labelText: 'E-mail',prefixIcon: Icon(Icons.email)),
@@ -53,8 +53,8 @@ class SignUpScreen extends StatelessWidget {
                     backgroundColor: MaterialStatePropertyAll(CupertinoColors.systemIndigo),
                       fixedSize: MaterialStatePropertyAll(Size.fromWidth(double.maxFinite))),
                   onPressed: () async{
-                    controller.fireStore();
                     controller.navigateToLogin(controller.registerNumber);
+                    controller.fireStore();
                   },
                   child: const Text('Add Data',style: TextStyle(color: Colors.white),)),
             ],

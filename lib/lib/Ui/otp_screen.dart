@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 
 import '../controller/otpcontroller.dart';
 
-class OtpScreen extends StatelessWidget {
+class OtpScreen extends GetView<OtpController> {
   const OtpScreen({super.key});
 
   @override
